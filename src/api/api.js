@@ -7,6 +7,12 @@ const indexName = import.meta.env.VITE_INDEX_NAME;
 const azureOpenAiEndpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
 const azureOpenAiApiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
 
+const apiUrl =
+  import.meta.env.VITE_API_URL ||
+  (process.env.NODE_ENV === "production"
+    ? import.meta.env.VITE_API_URL_PROD
+    : "http://localhost:5173/api");
+
 const searchClient = new SearchClient(
   searchEndpoint,
   indexName,
@@ -52,7 +58,7 @@ export const getAnswerFromAzureGPT = async (query, documentContent) => {
 export const searchDocuments = async (query) => {
   try {
     const response = await axios.post(
-      `/api/indexes('${indexName}')/docs/search.post.search?api-version=2024-07-01`,
+      `${apiUrl}/indexes('${indexName}')/docs/search.post.search?api-version=2024-07-01`,
       {
         search: query,
       }
