@@ -13,7 +13,6 @@ const apiUrl =
     : import.meta.env.VITE_API_URL;
 
 console.log("apiUrl", apiUrl);
-// console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 const searchClient = new SearchClient(
   searchEndpoint,
