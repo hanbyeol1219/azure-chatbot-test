@@ -42,15 +42,16 @@ export const ChatRoom = () => {
     <S.ChatRoomContainer>
       <S.Title>Chatbot Test</S.Title>
       <S.MessagesContainer>
-        {messages.map((message, index) => (
-          <S.Message
-            key={index}
-            role={message.role}
-            error={message.error ? "true" : undefined}
-          >
-            {message.content}
-          </S.Message>
-        ))}
+        {messages.length > 0 &&
+          messages.map((message, index) => (
+            <S.Message
+              key={index}
+              role={message.role}
+              error={message.error ? "true" : undefined}
+            >
+              {message.content}
+            </S.Message>
+          ))}
       </S.MessagesContainer>
       <S.InputContainer>
         <S.Input
