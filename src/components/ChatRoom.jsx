@@ -28,13 +28,13 @@ export const ChatRoom = () => {
         { role: "assistant", content: "API 호출 오류 발생", error: true },
       ]);
     }
-    setQuestion(""); // 질문 입력 필드 비우기
+    setQuestion("");
   };
 
   // 엔터 키 눌렀을 때 질문 처리
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      handleAskQuestion(); // 엔터 키로 질문 처리
+      handleAskQuestion();
     }
   };
 
@@ -58,7 +58,7 @@ export const ChatRoom = () => {
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          onKeyDown={handleKeyDown} // 엔터 키 입력 처리
+          onKeyDown={handleKeyDown}
           placeholder="질문을 입력하세요"
         />
         <S.Button onClick={handleAskQuestion}>입력</S.Button>
