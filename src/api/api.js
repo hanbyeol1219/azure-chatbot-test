@@ -8,10 +8,12 @@ const azureOpenAiEndpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
 const azureOpenAiApiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
 
 const apiUrl =
-  import.meta.env.VITE_API_URL ||
-  (process.env.NODE_ENV === "production"
+  process.env.NODE_ENV === "production"
     ? import.meta.env.VITE_API_URL_PROD
-    : "http://localhost:5173/api");
+    : import.meta.env.VITE_API_URL;
+
+console.log("apiUrl", apiUrl);
+console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 
 const searchClient = new SearchClient(
   searchEndpoint,
