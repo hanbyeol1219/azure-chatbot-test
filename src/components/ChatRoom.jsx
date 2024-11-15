@@ -39,7 +39,7 @@ export const ChatRoom = () => {
 
   return (
     <S.ChatRoomContainer>
-      <S.Title>Chatbot Test</S.Title>
+      <S.Title>Chatbot</S.Title>
       <S.MessagesContainer>
         {messages.length > 0 &&
           messages.map((message, index) => (
