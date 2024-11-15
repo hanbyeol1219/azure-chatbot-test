@@ -11,6 +11,9 @@ export default (req, res) => {
     res.status(500).send("환경 변수가 설정되지 않았습니다.");
     return;
   }
+
+  console.log("프록시 요청 URL:", req.url);
+
   const proxy = createProxyMiddleware({
     target: searchEndpoint,
     changeOrigin: true,
