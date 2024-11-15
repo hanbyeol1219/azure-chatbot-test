@@ -12,7 +12,7 @@ const apiUrl =
     ? import.meta.env.VITE_API_URL_PROD
     : import.meta.env.VITE_API_URL;
 
-console.log("apiUrl", apiUrl);
+// console.log("apiUrl", apiUrl);
 
 const searchClient = new SearchClient(
   searchEndpoint,

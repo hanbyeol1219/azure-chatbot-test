@@ -5,8 +5,8 @@ import cors from "cors";
 const app = express();
 const port = 3000;
 
-const searchEndpoint = import.meta.env.VITE_AZURE_SEARCH_ENDPOINT;
-const searchApiKey = import.meta.env.VITE_AZURE_SEARCH_API_KEY;
+const searchEndpoint = process.env.VITE_AZURE_SEARCH_ENDPOINT;
+const searchApiKey = process.env.VITE_AZURE_SEARCH_API_KEY;
 
 app.use(cors());
 
