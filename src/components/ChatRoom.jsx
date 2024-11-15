@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { searchDocuments, getAnswerFromOpenAiGPT } from "../api/api";
 import { S } from "../style/ChatRoom.styles";
 
 export const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
+  const lastMessageRef = useRef(null);
 
   const handleAskQuestion = async () => {
     if (question.trim() === "") return;
+    setQuestion("");
 
     const newMessages = [...messages, { role: "user", content: question }];
     setMessages(newMessages);
@@ -28,7 +30,6 @@ export const ChatRoom = () => {
         { role: "assistant", content: "API 호출 오류 발생", error: true },
       ]);
     }
-    setQuestion("");
   };
 
   const handleKeyDown = (e) => {
@@ -36,6 +37,15 @@ export const ChatRoom = () => {
       handleAskQuestion();
     }
   };
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [messages]);
 
   return (
     <S.ChatRoomContainer>
@@ -47,6 +57,7 @@ export const ChatRoom = () => {
               key={index}
               role={message.role}
               error={message.error ? "true" : undefined}
+              ref={index === messages.length - 1 ? lastMessageRef : null}
             >
               {message.content}
             </S.Message>
@@ -58,7 +69,7 @@ export const ChatRoom = () => {
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="질문을 입력하세요"
+          placeholder="입력"
         />
         <S.Button onClick={handleAskQuestion}>입력</S.Button>
       </S.InputContainer>
