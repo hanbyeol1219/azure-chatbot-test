@@ -6,7 +6,6 @@ export const ChatRoom = () => {
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
 
-  // 질문 처리 함수
   const handleAskQuestion = async () => {
     if (question.trim() === "") return;
 
@@ -31,7 +30,6 @@ export const ChatRoom = () => {
     setQuestion("");
   };
 
-  // 엔터 키 눌렀을 때 질문 처리
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleAskQuestion();

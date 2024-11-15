@@ -11,14 +11,11 @@ const port = 3000;
 const searchEndpoint = process.env.VITE_AZURE_SEARCH_ENDPOINT;
 const searchApiKey = process.env.VITE_AZURE_SEARCH_API_KEY;
 
+// cors() 미들웨어 사용으로 CORS 활성화
 app.use(cors());
 
 app.use(
   "/api",
-  (req, res, next) => {
-    console.log("프록시 요청이 들어왔습니다:", req.originalUrl);
-    next();
-  },
   createProxyMiddleware({
     target: searchEndpoint,
     changeOrigin: true,
@@ -29,9 +26,6 @@ app.use(
     headers: {
       "api-key": searchApiKey,
     },
-    onProxyReq: (proxyReq, req, res) => {
-      console.log("프록시 요청 URL:", proxyReq.path);
-    },
     onError(err, req, res) {
       console.error("프록시 오류:", err);
       res.status(500).send("서버 오류가 발생했습니다.");
@@ -39,6 +33,4 @@ app.use(
   })
 );
 
-app.listen(port, () => {
-  console.log(`Server: http://localhost:${port}`);
-});
+app.listen(port);

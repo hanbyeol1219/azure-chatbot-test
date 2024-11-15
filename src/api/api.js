@@ -7,18 +7,48 @@ const indexName = import.meta.env.VITE_INDEX_NAME;
 const azureOpenAiEndpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
 const azureOpenAiApiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
 
-const apiUrl =
-  process.env.NODE_ENV === "production"
-    ? import.meta.env.VITE_API_URL_PROD
-    : import.meta.env.VITE_API_URL;
+// 환경에 따라서 다른 API URL 사용 (개발, 배포 후)
+// const apiUrl =
+//   process.env.NODE_ENV === "production"
+//     ? import.meta.env.VITE_API_URL_PROD
+//     : import.meta.env.VITE_API_URL;
 
-// console.log("apiUrl", apiUrl);
-
+// Azure Search 서비스 연결
 const searchClient = new SearchClient(
   searchEndpoint,
   indexName,
   new AzureKeyCredential(searchApiKey)
 );
+
+// Azure Search 문서 검색
+export const searchDocuments = async (query) => {
+  try {
+    const response = await axios.post(
+      // `${apiUrl}/indexes('${indexName}')/docs/search.post.search?api-version=2024-07-01`,
+      `/api/indexes('${indexName}')/docs/search.post.search?api-version=2024-07-01`,
+      {
+        search: query,
+      }
+    );
+    let documentContent = "";
+
+    for (const result of response.data.value) {
+      const content = result.content;
+      const metadataStorageName = result.metadata_storage_name;
+
+      // test.pdf 문서만 선택
+      if (metadataStorageName === "test.pdf") {
+        documentContent = content;
+        break;
+      }
+    }
+
+    return documentContent;
+  } catch (error) {
+    console.error("오류 정보:", error.response?.data);
+    throw new Error("API 호출 오류 발생: " + error.message);
+  }
+};
 
 // GPT-3.5 Turbo 답변 생성
 export const getAnswerFromAzureGPT = async (query, documentContent) => {
@@ -49,35 +79,6 @@ export const getAnswerFromAzureGPT = async (query, documentContent) => {
     );
 
     return response.data.choices[0].message.content.trim();
-  } catch (error) {
-    console.error("오류 정보:", error.response?.data);
-    throw new Error("API 호출 오류 발생: " + error.message);
-  }
-};
-
-// Azure Search 문서 검색
-export const searchDocuments = async (query) => {
-  try {
-    const response = await axios.post(
-      `${apiUrl}/indexes('${indexName}')/docs/search.post.search?api-version=2024-07-01`,
-      {
-        search: query,
-      }
-    );
-    let documentContent = "";
-
-    for (const result of response.data.value) {
-      const content = result.content;
-      const metadataStorageName = result.metadata_storage_name;
-
-      // test.pdf 문서만 선택
-      if (metadataStorageName === "test.pdf") {
-        documentContent = content;
-        break;
-      }
-    }
-
-    return documentContent;
   } catch (error) {
     console.error("오류 정보:", error.response?.data);
     throw new Error("API 호출 오류 발생: " + error.message);
