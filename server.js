@@ -1,17 +1,18 @@
 import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import cors from "cors";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
 
-const searchEndpoint = process.env.AZURE_SEARCH_ENDPOINT;
-const searchApiKey = process.env.AZURE_SEARCH_API_KEY;
+const searchEndpoint = process.env.VITE_AZURE_SEARCH_ENDPOINT;
+const searchApiKey = process.env.VITE_AZURE_SEARCH_API_KEY;
 
-// 모든 도메인에서 서버에 요청할 수 있도록 CORS를 허용
 app.use(cors());
 
-// api 경로로 들어오는 요청을 Azure Search API에 프록시하는 설정
 app.use(
   "/api",
   (req, res, next) => {
@@ -23,13 +24,13 @@ app.use(
     changeOrigin: true,
     secure: true,
     pathRewrite: {
-      "^/api": "", // /api를 제외한 나머지 경로만 API로 전송
+      "^/api": "",
     },
     headers: {
       "api-key": searchApiKey,
     },
     onProxyReq: (proxyReq, req, res) => {
-      console.log("프록시 요청 URL:", proxyReq.path); // Azure로 보내는 최종 URL
+      console.log("프록시 요청 URL:", proxyReq.path);
     },
     onError(err, req, res) {
       console.error("프록시 오류:", err);
