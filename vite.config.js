@@ -12,4 +12,10 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    exclude: ["openai"],
+  },
+  ssr: {
+    noExternal: ["openai"],
+  },
 });

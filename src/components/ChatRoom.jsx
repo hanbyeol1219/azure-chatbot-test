@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { searchDocuments, getAnswerFromAzureGPT } from "../api/api";
+import { searchDocuments, getAnswerFromOpenAiGPT } from "../api/api";
 import { S } from "../style/ChatRoom.styles";
 
 export const ChatRoom = () => {
@@ -14,7 +14,8 @@ export const ChatRoom = () => {
 
     try {
       const documentContent = await searchDocuments(question);
-      const answer = await getAnswerFromAzureGPT(question, documentContent);
+      // const answer = await getAnswerFromAzureGPT(question, documentContent);
+      const answer = await getAnswerFromOpenAiGPT(question, documentContent);
 
       setMessages([
         ...newMessages,

@@ -18,8 +18,8 @@ export const S = {
     margin-bottom: 16px;
   `,
   MessagesContainer: styled.div`
-    width: 95%;
-    min-width: 300px;
+    width: 400px;
+    min-width: 400px;
     height: 70vh;
     overflow-y: auto;
     padding: 16px;
@@ -31,7 +31,6 @@ export const S = {
     flex-direction: column;
   `,
   Message: styled.div`
-    width: 70%;
     width: 70%;
     margin-bottom: 12px;
     padding: 10px;

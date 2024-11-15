@@ -4,8 +4,9 @@ import { AzureKeyCredential, SearchClient } from "@azure/search-documents";
 const searchEndpoint = import.meta.env.VITE_AZURE_SEARCH_ENDPOINT;
 const searchApiKey = import.meta.env.VITE_AZURE_SEARCH_API_KEY;
 const indexName = import.meta.env.VITE_INDEX_NAME;
-const azureOpenAiEndpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
-const azureOpenAiApiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
+// const azureOpenAiEndpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
+// const azureOpenAiApiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
+const openAiApiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
 // 환경에 따라서 다른 API URL 사용 (개발, 배포 후)
 // const apiUrl =
@@ -36,8 +37,8 @@ export const searchDocuments = async (query) => {
       const content = result.content;
       const metadataStorageName = result.metadata_storage_name;
 
-      // test.pdf 문서만 선택
-      if (metadataStorageName === "test.pdf") {
+      // 특정 pdf 문서만 선택
+      if (metadataStorageName === "data.pdf") {
         documentContent = content;
         break;
       }
@@ -51,7 +52,41 @@ export const searchDocuments = async (query) => {
 };
 
 // GPT-3.5 Turbo 답변 생성
-export const getAnswerFromAzureGPT = async (query, documentContent) => {
+// export const getAnswerFromAzureGPT = async (query, documentContent) => {
+//   if (!documentContent) {
+//     documentContent = "관련된 문서를 찾을 수 없습니다.";
+//   }
+
+//   const messages = [
+//     { role: "system", content: "You are a helpful assistant." },
+//     { role: "user", content: query },
+//     { role: "assistant", content: documentContent },
+//   ];
+
+//   try {
+//     const response = await axios.post(
+//       `${azureOpenAiEndpoint}?api-version=2024-08-01-preview`,
+//       {
+//         messages: messages,
+//         max_tokens: 500,
+//         temperature: 0.7,
+//       },
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           "api-key": azureOpenAiApiKey,
+//         },
+//       }
+//     );
+
+//     return response.data.choices[0].message.content.trim();
+//   } catch (error) {
+//     console.error("오류 정보:", error.response?.data);
+//     throw new Error("API 호출 오류 발생: " + error.message);
+//   }
+// };
+
+export const getAnswerFromOpenAiGPT = async (query, documentContent) => {
   if (!documentContent) {
     documentContent = "관련된 문서를 찾을 수 없습니다.";
   }
@@ -64,8 +99,9 @@ export const getAnswerFromAzureGPT = async (query, documentContent) => {
 
   try {
     const response = await axios.post(
-      `${azureOpenAiEndpoint}?api-version=2024-08-01-preview`,
+      "https://api.openai.com/v1/chat/completions",
       {
+        model: "gpt-4o",
         messages: messages,
         max_tokens: 500,
         temperature: 0.7,
@@ -73,14 +109,14 @@ export const getAnswerFromAzureGPT = async (query, documentContent) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "api-key": azureOpenAiApiKey,
+          Authorization: `Bearer ${openAiApiKey}`,
         },
       }
     );
 
     return response.data.choices[0].message.content.trim();
   } catch (error) {
-    console.error("오류 정보:", error.response?.data);
+    console.error("오류 정보:", error.response?.data || error.message);
     throw new Error("API 호출 오류 발생: " + error.message);
   }
 };
