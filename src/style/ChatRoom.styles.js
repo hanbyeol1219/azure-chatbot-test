@@ -30,16 +30,28 @@ export const S = {
     display: flex;
     flex-direction: column;
   `,
-  Message: styled.div`
-    width: 70%;
+  MessageBox: styled.div`
     margin-bottom: 12px;
-    padding: 10px;
-    border-radius: 6px;
+    align-items: flex-end;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: ${({ role }) => (role === "user" ? "row-reverse" : "row")};
+  `,
+  MessageContent: styled.div`
+    padding: 8px 12px;
+    border-radius: 8px;
     background-color: ${({ role }) =>
       role === "user" ? "#d1e7dd" : "#e2e3e5"};
     color: ${({ error }) => (error ? "#d9534f" : "#333")};
-    align-self: ${({ role }) => (role === "user" ? "flex-end" : "flex-start")};
     text-align: left;
+    display: inline-block;
+    max-width: 70%;
+  `,
+  CreateTime: styled.span`
+    font-size: 12px;
+    color: gray;
+    margin-right: ${({ role }) => (role === "user" ? "5px" : "0")};
+    margin-left: ${({ role }) => (role === "user" ? "0" : "5px")};
   `,
   InputContainer: styled.div`
     display: flex;
@@ -61,7 +73,6 @@ export const S = {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
-
     &:hover {
       background-color: #0056b3;
     }

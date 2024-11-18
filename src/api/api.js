@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AzureKeyCredential, SearchClient } from "@azure/search-documents";
+// import { google } from "googleapis";
 
 const searchEndpoint = import.meta.env.VITE_AZURE_SEARCH_ENDPOINT;
 const searchApiKey = import.meta.env.VITE_AZURE_SEARCH_API_KEY;
@@ -7,6 +8,9 @@ const indexName = import.meta.env.VITE_INDEX_NAME;
 // const azureOpenAiEndpoint = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
 // const azureOpenAiApiKey = import.meta.env.VITE_AZURE_OPENAI_API_KEY;
 const openAiApiKey = import.meta.env.VITE_OPENAI_API_KEY;
+// const credentials = JSON.parse(import.meta.env.VITE_GOOGLE_SHEET_CREDENTIALS);
+// const sheetId = import.meta.env.VITE_GOOGLE_SHEET_ID;
+// const sheetName = import.meta.env.VITE_GOOGLE_SHEET_NAME;
 
 // 환경에 따라서 다른 API URL 사용 (개발, 배포 후)
 // const apiUrl =
@@ -119,4 +123,35 @@ export const getAnswerFromOpenAiGPT = async (query, documentContent) => {
     console.error("오류 정보:", error.response?.data || error.message);
     throw new Error("API 호출 오류 발생: " + error.message);
   }
+};
+
+// 구글 시트에 데이터 추가
+export const appendDataToGoogleSheet = async (data) => {
+  // try {
+  //   // 인증 클라이언트
+  //   const auth = new google.auth.GoogleAuth({
+  //     keyFile: credentials,
+  //     scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  //   });
+
+  //   const sheets = google.sheets({ version: "v4", auth });
+
+  //   const values = [[data.name, data.age, data.address, data.createTime]];
+
+  //   // Google Sheets API 호출
+  //   const response = await sheets.spreadsheets.values.append({
+  //     spreadsheetId: sheetId,
+  //     range: `${sheetName}!B1`,
+  //     valueInputOption: "RAW",
+  //     resource: {
+  //       values,
+  //     },
+  //   });
+
+  //   console.log("성공", response.data);
+  // } catch (error) {
+  //   console.error("API 호출 오류:", error.message);
+  //   throw new Error("실패");
+  // }
+  console.log("Google Sheets API 호출");
 };
