@@ -39,6 +39,7 @@ export const searchDocuments = async (query) => {
 
     for (const result of response.data.value) {
       const content = result.content;
+
       const metadataStorageName = result.metadata_storage_name;
 
       // 특정 pdf 문서만 선택
